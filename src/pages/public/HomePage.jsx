@@ -35,7 +35,7 @@ const HomePage = () => {
           <h1 className='pb-8 text-3xl font-bold'>Popular blogs</h1>
           <div className="grid grid-cols-3 gap-6 pb-16 border-b border-neutral-200">
             <div>
-              <img src="cart1.png" className='w-full object-cover w-full h-[310px]' alt="" />
+              <img src="cart1.png" className='w-full object-cover  h-[310px]' alt="" />
               
               <div className='mt-5'>By John Doe   l   Aug 23, 2021 </div>
 
@@ -47,7 +47,7 @@ const HomePage = () => {
             </div>
 
             <div>
-              <img src="cart2.png" className='w-full object-cover w-full h-[310px]' alt="" />
+              <img src="cart2.png" className=' object-cover w-full h-[310px]' alt="" />
               
               <div className='mt-5'>By John Doe   l   Aug 23, 2021 </div>
 
@@ -59,7 +59,7 @@ const HomePage = () => {
             </div>
 
             <div>
-              <img src="cart3.png" className='w-full object-cover w-full h-[310px]' alt="" />
+              <img src="cart3.png" className=' object-cover w-full h-[310px]' alt="" />
               
               <div className='mt-5'>By John Doe   l   Aug 23, 2021 </div>
 
