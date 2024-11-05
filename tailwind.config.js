@@ -5,14 +5,10 @@ module.exports = {
       extend: {
          colors: {
             primary: {
-               600: '#FF7010',
+               500: '#F4F0F8',
+               600: '#232536',
+               700: '#FFD050'
             },
-            'best-dark-gray': '#212121',
-            'best-middle-gray': '#949494',
-            'white-smoke': '#f5f5f8',
-            'best-light-gray': '#f4f4f4',
-            'bor-color': '#e1e1e1',
-            'dim-gray': '#3C3C3C',
          },
       },
    },
