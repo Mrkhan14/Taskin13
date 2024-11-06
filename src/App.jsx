@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.css';
 import PublicLayout from './components/layout/PublicLayout';
+// import useAuth from './hooks/useAuth';
 import AboutPage from './pages/public/AboutPage';
 import BlogPage from './pages/public/BlogPage';
 import BlogsPage from './pages/public/BlogsPage';
@@ -11,6 +12,7 @@ import LoginPage from './pages/public/LoginPage';
 import RegisterPage from './pages/public/RegisterPage';
 
 function App() {
+   // const { user } = useAuth();
    return (
       <>
          <BrowserRouter>

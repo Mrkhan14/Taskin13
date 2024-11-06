@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { LIMIT } from '../../context/index';
+import { LIMIT } from '../../utils/constants';
 import InputComponent from './../../components/box/InputComponent';
 import CartPost from './../../components/card/CartPost';
 import PaginationComponent from './../../components/pagination/PaginationComponent'; // Make sure the path is correct
