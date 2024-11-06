@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -6,10 +7,12 @@ import request from '../services/reauest';
 import { TOKEN, USER } from '../utils/constants';
 
 const AuthProvider = ({ children }) => {
-   const [user, setUser] = useState(null);
+   const [user, setUser] = useState(
+      JSON.parse(localStorage.getItem(USER)) || null
+   );
    const [loading, setLoading] = useState(false);
 
-   const login = async values => {
+   const login = async (values, navigate) => {
       try {
          setLoading(true);
          const {
@@ -20,11 +23,21 @@ const AuthProvider = ({ children }) => {
 
          request.defaults.headers.common.Authorization = `Bearer ${token}`;
 
-         const { data } = await request.get('auth/me');
+         const { data: user } = await request.get('auth/me');
 
-         localStorage.setItem(USER, JSON.stringify(data));
+         localStorage.setItem(USER, JSON.stringify(user));
 
-         setUser(data);
+         setUser(user);
+
+         const { role } = user;
+
+         message.success('Siz tizimga kirdingiz');
+
+         if (role === 'admin') {
+            navigate('/dashboard');
+         } else if (role === 'user') {
+            navigate('/my-post');
+         }
       } finally {
          setLoading(false);
       }

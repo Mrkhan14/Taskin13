@@ -1,10 +1,12 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import InputComponent from './../../components/box/InputComponent';
 
 const LoginPage = () => {
    const { login, loading } = useAuth();
+   const navigate = useNavigate();
    const {
       register,
       handleSubmit,
@@ -12,7 +14,7 @@ const LoginPage = () => {
    } = useForm();
 
    const onSubmit = data => {
-      login(data);
+      login(data, navigate);
       console.log('Form Data:', data);
    };
 

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const MyPostPage = () => {
-  return (
-    <div>MyPostPage</div>
-  )
-}
+   return <div>MyPostPage</div>;
+};
 
-export default MyPostPage
+export default MyPostPage;
