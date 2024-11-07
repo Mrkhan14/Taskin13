@@ -13,17 +13,16 @@ const RegisterPage = () => {
       formState: { errors },
    } = useForm();
 
-   const onSubmit = data => {
-      // data = {}
-      // const { first_name, last_name, username, password, role } = data;
-      // const formData = new FormData();
-      // formData.append('first_name', first_name);
-      // formData.append('last_name', last_name);
-      // formData.append('username', username);
-      // formData.append('password', password);
-      // formData.append('role', role);
-      // registerFun(formData, navigate);
-      registerFun(data, navigate);
+   const onSubmit = ( data = {}) => {
+      const { first_name, last_name, username, password, role } = data;
+      const formData = new FormData();
+      formData.append('first_name', first_name);
+      formData.append('last_name', last_name);
+      formData.append('username', username);
+      formData.append('password', password);
+      formData.append('role', role);
+      registerFun(formData, navigate);
+      // registerFun(data, navigate);
       console.log('Form Data:', data);
    };
 
