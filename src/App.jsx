@@ -7,6 +7,7 @@ import UserLayout from './components/layout/UserLayout';
 import useAuth from './hooks/useAuth';
 import AdminAccountPage from './pages/protected/admin/AdminAccountPage';
 import DashboardPage from './pages/protected/admin/DashboardPage';
+
 import MyPostPage from './pages/protected/user/MyPostPage';
 import UserAccountPage from './pages/protected/user/UserAccountPage';
 import AboutPage from './pages/public/AboutPage';
@@ -15,10 +16,10 @@ import BlogsPage from './pages/public/BlogsPage';
 import CategoryPage from './pages/public/CategoryPage';
 import HomePage from './pages/public/HomePage';
 import LoginPage from './pages/public/LoginPage';
+import NotFoundPage from './pages/public/NotFoundPage';
 import RegisterPage from './pages/public/RegisterPage';
-
 function App() {
-   const { user } = useAuth() || {}; // Ensure useAuth is not null
+   const { user } = useAuth() || {};
    const role = user?.role;
    return (
       <>
@@ -48,10 +49,10 @@ function App() {
                   <Route path='login' element={<LoginPage></LoginPage>}></Route>
 
                   {/* User Pages  */}
-                  {role === 'admin' ? (
+                  {role === 'user' ? (
                      <Fragment>
                         <Route
-                           path='my-post'
+                           path='myPost'
                            element={<MyPostPage></MyPostPage>}
                         ></Route>
                         <Route
@@ -75,6 +76,9 @@ function App() {
                      ></Route>
                   </Route>
                ) : null}
+
+               {/* Not Found Page */}
+               <Route path='*' element={<NotFoundPage />} />
             </Routes>
          </BrowserRouter>
       </>

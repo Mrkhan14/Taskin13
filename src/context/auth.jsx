@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) => {
          if (role === 'admin') {
             navigate('/dashboard');
          } else if (role === 'user') {
-            navigate('/my-post');
+            navigate('/myPost');
          }
       } finally {
          setLoading(false);

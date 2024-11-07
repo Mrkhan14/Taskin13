@@ -1,11 +1,3 @@
-// import React from 'react';
-
-// const MyPostPage = () => {
-//    return <div>MyPostPage</div>;
-// };
-
-// export default MyPostPage;
-
 import React, { Fragment, useState } from 'react';
 import { LIMIT } from '../../../utils/constants';
 import InputComponent from './../../../components/box/InputComponent';
@@ -73,7 +65,7 @@ const MyPostPage = () => {
          {/* itme posts */}
          <div className='pt-10 pb-20'>
             <div className='container'>
-               <div className="flex items-center justify-between">
+               <div className='flex items-center justify-between'>
                   <h1 className='text-5xl font-bold '>My posts</h1>
                   <button
                      className='bg-[#FFD050] text-2xl font-medium p-4 w-48 text-primary-600'
