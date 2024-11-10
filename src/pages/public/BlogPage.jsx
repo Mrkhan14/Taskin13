@@ -5,9 +5,9 @@ const BlogPage = () => {
    const { id } = useParams();
    return (
       <Fragment>
-         <div className='pt-14 pb-32'>
+         <div className='pb-32 pt-14'>
             <div className='container'>
-               <div>Blog Page ID {id}</div>
+               <div>Blog Page IDs {id}</div>
 
                <img
                   src='../../../public/cart2.png'
@@ -20,7 +20,7 @@ const BlogPage = () => {
                      <img
                         src='../../../public/avatar.png'
                         alt=''
-                        className='w-14 h-14 rounded-full object-cover mr-3'
+                        className='object-cover mr-3 rounded-full w-14 h-14'
                      />
                      <div>
                         <span>Andrew Jonson</span>
@@ -28,7 +28,7 @@ const BlogPage = () => {
                      </div>
                   </div>
 
-                  <div className='text-6xl font-bold mt-8 text-primary-600'>
+                  <div className='mt-8 text-6xl font-bold text-primary-600'>
                      Step-by-step guide to choosing great font pairs
                   </div>
 
@@ -36,7 +36,7 @@ const BlogPage = () => {
                      Startup (#business, #screen, #life)
                   </div>
 
-                  <p className='mt-8 text-primary-600 opacity-50'>
+                  <p className='mt-8 opacity-50 text-primary-600'>
                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                      sed do eiusmod tempor incididunt ut labore et dolore magna
                      aliqua. Non blandit massa enim nec. Scelerisque viverra
@@ -47,7 +47,7 @@ const BlogPage = () => {
                      gravida rutrum quisque non.
                   </p>
 
-                  <p className='mt-8 text-primary-600 opacity-50'>
+                  <p className='mt-8 opacity-50 text-primary-600'>
                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                      sed do eiusmod tempor incididunt ut labore et dolore magna
                      aliqua. Non blandit massa enim nec. Scelerisque viverra

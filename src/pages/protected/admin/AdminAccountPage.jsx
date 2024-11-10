@@ -1,7 +1,10 @@
 import React from 'react';
+import Accounts from '../../../components/card/Accounts';
 
 const AdminAccountPage = () => {
-   return <div>AdminAccountPage</div>;
+   return (
+      <Accounts></Accounts>
+   );
 };
 
 export default AdminAccountPage;

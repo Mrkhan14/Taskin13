@@ -18,6 +18,9 @@ import HomePage from './pages/public/HomePage';
 import LoginPage from './pages/public/LoginPage';
 import NotFoundPage from './pages/public/NotFoundPage';
 import RegisterPage from './pages/public/RegisterPage';
+import CategoriesPage from './pages/protected/admin/CategoriesPage';
+import UsersPage from './pages/protected/admin/UsersPage';
+import AdminBlogsPage from './pages/protected/admin/AdminBlogsPage';
 function App() {
    const { user } = useAuth() || {};
    const role = user?.role;
@@ -69,6 +72,18 @@ function App() {
                      <Route
                         path='dashboard'
                         element={<DashboardPage></DashboardPage>}
+                     ></Route>
+                     <Route
+                        path='categories'
+                        element={<CategoriesPage></CategoriesPage>}
+                     ></Route>
+                     <Route
+                        path='users'
+                        element={<UsersPage></UsersPage>}
+                     ></Route>
+                     <Route
+                        path='admin-blogs'
+                        element={<AdminBlogsPage></AdminBlogsPage>}
                      ></Route>
                      <Route
                         path='admin-account'
