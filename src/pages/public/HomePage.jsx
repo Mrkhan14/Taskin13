@@ -1,9 +1,27 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
+import {useDispatch , useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+// import useCounter from '../../redux/hooks/counter';
+// import { decrease, increase } from '../../redux/actions/counter';
 
 const HomePage = () => {
+  // const dispatch = useDispatch();
+  // const {value1} = useCounter();
+
+  // const dec = () => {
+  //   dispatch(decrease);
+  // };
+
+  // const inc = () => {
+  //   dispatch(increase);
+  // };
+
   return (
     <Fragment>
+      {/* <button onClick={() => dec(7)}>-</button>
+      <span>{value1}</span>
+      <button onClick={() => inc(7)}>+</button> */}
+      
       <div className="relative top-block w-full h-[calc(100vh-80px)]">
         <img src="homeSlider.png" className='w-full h-[calc(100vh-80px)] object-cover absolute z-10 -scale-x-100' alt="" />
 
