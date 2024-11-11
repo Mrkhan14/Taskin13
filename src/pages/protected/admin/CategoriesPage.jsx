@@ -1,8 +1,13 @@
-import { Spin, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getCategories } from '../../../redux/actions/category';
+import { deleteCategory, getCategories } from '../../../redux/actions/category';
 import useCategory from '../../../redux/hooks/category';
+// import { render } from 'react-dom';
+import { DeleteOutlined , FormOutlined} from '@ant-design/icons';
+import { Button,  Tooltip,  Spin, Table, Modal, Image  } from 'antd';
+import getPhotoUrl from './../../../utils/getPhotoUrl'
+
+const {confirm} = Modal
 
 const CategoriesPage = () => {
    const dispatch = useDispatch();
@@ -19,11 +24,49 @@ const CategoriesPage = () => {
       setSize(pagination.pageSize);
    };
 
+   const openConfirmDeleteModal = (id) => {
+      confirm({
+         title: 'Confirm',
+         // icon: <ExclamationCircleOutlined />,
+         content: 'Bla bla ...',
+         okText: 'yes',
+         cancelText: 'No',
+         onOk: () => dispatch(deleteCategory(id))
+      });
+   }
+   
+   
    const columns = [
+      {
+         title: 'Photo',
+         dataIndex: 'photo',
+         render: (photo) => <Image src={getPhotoUrl(photo)}></Image>
+      },
       {
          title: 'Category Name',
          dataIndex: 'name',
          key: 'name',
+      },
+      {
+         title: 'Description',
+         dataIndex: 'description',
+         key: 'description',
+      },
+      {
+         title: 'Setting',
+         dataIndex: "_id",
+         render: (id) => (
+            <Fragment>
+               <div className="flex">
+                  <Tooltip title="Update" className='mr-2'>
+                     <Button  shape="circle" icon={<FormOutlined />} /> 
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                     <Button  onClick={() => openConfirmDeleteModal(id)} danger shape="circle" icon={<DeleteOutlined />} />
+                  </Tooltip>
+               </div>
+            </Fragment>
+         ),
       },
    ];
 
@@ -34,7 +77,7 @@ const CategoriesPage = () => {
       showSizeChanger: true,
       showQuickJumper: true,
    };
-
+   
    return (
       <Spin spinning={loading}>
          <Table

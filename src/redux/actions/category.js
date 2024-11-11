@@ -1,41 +1,9 @@
 import require from '../../services/request';
+import { LIMIT, PAGE } from '../../utils/constants';
 
-// const getCategories = () => {
-//    return async dispatch => {
-//       try {
-//          const { data } = await require.get('category');
-//          console.log(data, 'sss');
-//          dispatch({
-//             payload: { total: total, categories: data, loading: true },
-//             type: 'getCategories',
-//          });
-//       } finally {
-//          dispatch({ loading: false });
-//          console.log('finally');
-//       }
-//    };
-// };
-
-// const getCategories = () => async dispatch => {
-//    try {
-//       dispatch(changeLoading());
-//       const {
-//          data: {
-//             pagination: { total },
-//             data,
-//          },
-//       } = await require.get('category');
-//       dispatch({
-//          payload: { total, categories: data },
-//          type: 'getCategories',
-//       });
-//    } finally {
-//       dispatch(changeLoading());
-//    }
-// };
-
+// Category Lists
 const getCategories =
-   (page = 1, limit = 10) =>
+   (page = PAGE, limit = LIMIT) =>
    async dispatch => {
       try {
          dispatch(changeLoading());
@@ -52,7 +20,15 @@ const getCategories =
       } finally {
          dispatch(changeLoading());
       }
-   };
+};
+
+// Categories Delete
+const deleteCategory = (id) => async (dispatch) => {
+   await require.delete(`category/${id}`);
+   dispatch(getCategories(currentPage, pageSize))
+   console.log('as', urrentPage, pageSize);
+};
+
 
 const changeLoading = () => dispatch => {
    dispatch({
@@ -60,4 +36,4 @@ const changeLoading = () => dispatch => {
    });
 };
 
-export { getCategories };
+export { getCategories, deleteCategory };

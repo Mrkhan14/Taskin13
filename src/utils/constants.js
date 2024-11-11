@@ -1,8 +1,9 @@
 const USER = 'USER';
 const TOKEN = 'TOKEN';
 const LANGUAGE = 'language';
-const LIMIT = 8;
+const LIMIT = 5;
 const IS_LOGIN = 'ISLOGIN';
+const PAGE = 1
 
 const BASEURL = 'https://ap-blog-backend.up.railway.app/';
 const UPLOAD_URL = `${BASEURL}upload/`;
@@ -17,4 +18,5 @@ export {
    TOKEN,
    UPLOAD_URL,
    USER,
+   PAGE
 };
