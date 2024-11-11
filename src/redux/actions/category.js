@@ -16,23 +16,43 @@ import require from '../../services/request';
 //    };
 // };
 
-const getCategories = () => async dispatch => {
-   try {
-      dispatch(changeLoading());
-      const {
-         data: {
-            pagination: { total },
-            data,
-         },
-      } = await require.get('category');
-      dispatch({
-         payload: { total, categories: data },
-         type: 'getCategories',
-      });
-   } finally {
-      dispatch(changeLoading());
-   }
-};
+// const getCategories = () => async dispatch => {
+//    try {
+//       dispatch(changeLoading());
+//       const {
+//          data: {
+//             pagination: { total },
+//             data,
+//          },
+//       } = await require.get('category');
+//       dispatch({
+//          payload: { total, categories: data },
+//          type: 'getCategories',
+//       });
+//    } finally {
+//       dispatch(changeLoading());
+//    }
+// };
+
+const getCategories =
+   (page = 1, limit = 10) =>
+   async dispatch => {
+      try {
+         dispatch(changeLoading());
+         const {
+            data: {
+               pagination: { total, page: currentPage, limit: pageSize },
+               data: categories,
+            },
+         } = await require.get(`category?page=${page}&limit=${limit}`);
+         dispatch({
+            payload: { total, categories, currentPage, pageSize },
+            type: 'getCategories',
+         });
+      } finally {
+         dispatch(changeLoading());
+      }
+   };
 
 const changeLoading = () => dispatch => {
    dispatch({
