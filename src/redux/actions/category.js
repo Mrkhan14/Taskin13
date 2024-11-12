@@ -20,20 +20,19 @@ const getCategories =
       } finally {
          dispatch(changeLoading());
       }
-};
+   };
 
 // Categories Delete
-const deleteCategory = (id) => async (dispatch) => {
+const deleteCategory = id => async dispatch => {
    await require.delete(`category/${id}`);
-   dispatch(getCategories(currentPage, pageSize))
-   console.log('as', urrentPage, pageSize);
+   dispatch(getCategories(currentPage, pageSize));
 };
 
-
+// Loading page
 const changeLoading = () => dispatch => {
    dispatch({
       type: 'loading',
    });
 };
 
-export { getCategories, deleteCategory };
+export { deleteCategory, getCategories };

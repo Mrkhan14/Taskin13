@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux';
 import categoryReducers from './category';
-import counterReducer from './counter';
-import lenReducer from './len';
+import userReducers from './user';
 
 const rootReducer = combineReducers({
-   counter: counterReducer,
-   len: lenReducer,
    category: categoryReducers,
+   user: userReducers,
 });
 
 export default rootReducer;
