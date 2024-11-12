@@ -1,31 +1,91 @@
 import require from '../../services/request';
-import { LIMIT, PAGE } from '../../utils/constants';
+import { LIMIT } from '../../utils/constants';
+
+import { CATEGORY_ACTIONS } from '../types/category';
+
+const updateStateChange = payload => {
+   return { type: CATEGORY_ACTIONS, payload };
+};
 
 // Category Lists
 const getCategories =
-   (page = PAGE, limit = LIMIT) =>
+   (page = 1, limit = LIMIT) =>
    async dispatch => {
       try {
          dispatch(changeLoading());
          const {
             data: {
-               pagination: { total, page: currentPage, limit: pageSize },
+               pagination: { total, page: currentPage },
                data: categories,
             },
          } = await require.get(`category?page=${page}&limit=${limit}`);
-         dispatch({
-            payload: { total, categories, currentPage, pageSize },
-            type: 'getCategories',
-         });
+         // dispatch({
+         //    payload: { total, categories, currentPage, pageSize: limit },
+         //    type: 'getCategories',
+         // });
+         dispatch(
+            updateStateChange({
+               total,
+               categories,
+               currentPage,
+               pageSize: limit,
+            })
+         );
       } finally {
          dispatch(changeLoading());
       }
    };
 
+const controlModal = payload => dispatch => {
+   dispatch(updateStateChange({ isModalOpen: payload }));
+};
+
+const uploadImage = file => async dispatch => {
+   try {
+      dispatch(updateStateChange({ imageLoading: true }));
+      const formData = new FormData();
+      formData.append('file', file);
+      const { data } = await request.post('upload', formData);
+      dispatch(updateStateChange({ imageData: data }));
+   } finally {
+      dispatch(updateStateChange({ imageLoading: false }));
+   }
+};
+
+const sendCategory =
+   ({ values, selected, activePage, search, form }) =>
+   async dispatch => {
+      try {
+         dispatch(updateStateChange({ isModalLoading: true }));
+         selected === null
+            ? await request.post('category', values)
+            : await request.put(`category/${selected}`, values);
+         dispatch(updateStateChange({ isModalOpen: false, imageData: null }));
+         dispatch(getCategories(activePage, search));
+         form.resetFields();
+      } finally {
+         dispatch(updateStateChange({ isModalLoading: false }));
+      }
+   };
+
+const editCategory = (form, id) => async dispatch => {
+   dispatch(updateStateChange({ selected: id, isModalOpen: true }));
+   const { data } = await request.put(`category/${id}`);
+   dispatch(updateStateChange({ imageData: data.photo }));
+   form.setFieldsValue(data);
+};
+
 // Categories Delete
 const deleteCategory = id => async dispatch => {
    await require.delete(`category/${id}`);
    dispatch(getCategories(currentPage, pageSize));
+};
+
+const showModal = form => async dispatch => {
+   dispatch(
+      updateStateChange({ selected: null, imageData: null, isModalOpen: true })
+   );
+   form.resetFields();
 };
 
 // Loading page
@@ -35,4 +95,12 @@ const changeLoading = () => dispatch => {
    });
 };
 
-export { deleteCategory, getCategories };
+export {
+   controlModal,
+   deleteCategory,
+   editCategory,
+   getCategories,
+   sendCategory,
+   showModal,
+   uploadImage,
+};

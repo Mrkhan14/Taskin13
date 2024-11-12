@@ -1,46 +1,94 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteCategory, getCategories } from '../../../redux/actions/category';
+
+import {
+   controlModal,
+   deleteCategory,
+   editCategory,
+   getCategories,
+   sendCategory,
+   showModal,
+   uploadImage,
+} from '../../../redux/actions/category';
+
 import useCategory from '../../../redux/hooks/category';
 // import { render } from 'react-dom';
-import { DeleteOutlined , FormOutlined} from '@ant-design/icons';
-import { Button,  Tooltip,  Spin, Table, Modal, Image  } from 'antd';
-import getPhotoUrl from './../../../utils/getPhotoUrl'
+import {
+   DeleteOutlined,
+   FormOutlined,
+   LoadingOutlined,
+   PlusOutlined,
+} from '@ant-design/icons';
+import {
+   Button,
+   Form,
+   Image,
+   Input,
+   Modal,
+   Spin,
+   Table,
+   Tooltip,
+   Upload,
+} from 'antd';
 
-const {confirm} = Modal
+import getPhotoUrl from './../../../utils/getPhotoUrl';
+
+const { confirm } = Modal;
 
 const CategoriesPage = () => {
    const dispatch = useDispatch();
-   const { categories, total, loading, currentPage, pageSize } = useCategory();
+   const {
+      categories,
+      total,
+      loading,
+      currentPage,
+      pageSize,
+      selected,
+      isModalLoading,
+      isModalOpen,
+      imageData,
+      imageLoading,
+   } = useCategory();
    const [page, setPage] = useState(currentPage);
    const [size, setSize] = useState(pageSize);
+
+   const [form] = Form.useForm();
 
    useEffect(() => {
       dispatch(getCategories(page, size));
    }, [dispatch, page, size]);
+
+   const handleOk = async () => {
+      const values = await form.validateFields();
+      values.photo = imageData._id;
+      dispatch(sendCategory({ values, selected, activePage, search, form }));
+   };
+
+   const closeModal = () => {
+      dispatch(controlModal(false));
+   };
 
    const handleTableChange = pagination => {
       setPage(pagination.current);
       setSize(pagination.pageSize);
    };
 
-   const openConfirmDeleteModal = (id) => {
+   const openConfirmDeleteModal = id => {
       confirm({
          title: 'Confirm',
-         // icon: <ExclamationCircleOutlined />,
          content: 'Bla bla ...',
          okText: 'yes',
          cancelText: 'No',
-         onOk: () => dispatch(deleteCategory(id))
+         onOk: () => dispatch(deleteCategory(id)),
       });
-   }
-   
-   
+   };
+
    const columns = [
       {
          title: 'Photo',
          dataIndex: 'photo',
-         render: (photo) => <Image src={getPhotoUrl(photo)}></Image>
+         key: 'photo',
+         render: data => <Image src={getPhotoUrl(data)}></Image>,
       },
       {
          title: 'Category Name',
@@ -54,15 +102,25 @@ const CategoriesPage = () => {
       },
       {
          title: 'Setting',
-         dataIndex: "_id",
-         render: (id) => (
+         dataIndex: '_id',
+         key: '_id',
+         render: data => (
             <Fragment>
-               <div className="flex">
-                  <Tooltip title="Update" className='mr-2'>
-                     <Button  shape="circle" icon={<FormOutlined />} /> 
+               <div className='flex'>
+                  <Tooltip title='Update' className='mr-2'>
+                     <Button
+                        onClick={() => dispatch(editCategory(form, data))}
+                        shape='circle'
+                        icon={<FormOutlined />}
+                     />
                   </Tooltip>
-                  <Tooltip title="Delete">
-                     <Button  onClick={() => openConfirmDeleteModal(id)} danger shape="circle" icon={<DeleteOutlined />} />
+                  <Tooltip title='Delete'>
+                     <Button
+                        onClick={() => openConfirmDeleteModal({ id: data })}
+                        danger
+                        shape='circle'
+                        icon={<DeleteOutlined />}
+                     />
                   </Tooltip>
                </div>
             </Fragment>
@@ -77,20 +135,112 @@ const CategoriesPage = () => {
       showSizeChanger: true,
       showQuickJumper: true,
    };
-   
+
    return (
-      <Spin spinning={loading}>
-         <Table
-            columns={columns}
-            dataSource={categories.map(category => ({
-               ...category,
-               key: category._id,
-            }))}
-            pagination={paginationConfig}
-            rowKey='_id' // Adjusted to use _id as per the provided data structure
-            onChange={handleTableChange}
-         />
-      </Spin>
+      <Fragment>
+         <div className='flex justify-between mb-3'>
+            <div className='font-bold text-xl'>
+               Users{' '}
+               <span className='bg-green-200  px-3 rounded-xl'>{total}</span>
+            </div>
+            <Button type='dashed' onClick={() => dispatch(showModal(form))}>
+               Add User
+            </Button>
+         </div>
+         <Spin spinning={loading}>
+            <Table
+               columns={columns}
+               dataSource={categories.map(category => ({
+                  ...category,
+                  key: category._id,
+               }))}
+               pagination={paginationConfig}
+               rowKey='_id' // Adjusted to use _id as per the provided data structure
+               onChange={handleTableChange}
+            />
+         </Spin>
+
+         <Modal
+            title='Category data'
+            maskClosable={false}
+            confirmLoading={isModalLoading}
+            okText={selected === null ? 'Add category' : 'Save category'}
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={closeModal}
+         >
+            <Form
+               name='category'
+               autoComplete='off'
+               labelCol={{
+                  span: 24,
+               }}
+               wrapperCol={{
+                  span: 24,
+               }}
+               form={form}
+            >
+               <Upload
+                  name='avatar'
+                  listType='picture-card'
+                  className='avatar-uploader'
+                  showUploadList={false}
+                  onChange={e => dispatch(uploadImage(e.file.originFileObj))}
+               >
+                  <div>
+                     {imageLoading ? (
+                        <LoadingOutlined />
+                     ) : imageData ? (
+                        <img
+                           src={getImage(imageData)}
+                           alt='avatar'
+                           style={{
+                              width: '100%',
+                           }}
+                        />
+                     ) : (
+                        <div>
+                           <PlusOutlined />
+                           <div
+                              style={{
+                                 marginTop: 8,
+                              }}
+                           >
+                              Upload
+                           </div>
+                        </div>
+                     )}
+                  </div>
+               </Upload>
+               {/* <input type="file" onChange={uploadImage}/> */}
+               <Form.Item
+                  label='Name'
+                  name='name'
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Please fill!',
+                     },
+                  ]}
+               >
+                  <Input />
+               </Form.Item>
+
+               <Form.Item
+                  label='Description'
+                  name='description'
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Please fill!',
+                     },
+                  ]}
+               >
+                  <Input.TextArea />
+               </Form.Item>
+            </Form>
+         </Modal>
+      </Fragment>
    );
 };
 
