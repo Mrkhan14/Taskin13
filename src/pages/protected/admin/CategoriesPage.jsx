@@ -31,7 +31,7 @@ import {
    Upload,
 } from 'antd';
 
-import getPhotoUrl from './../../../utils/getPhotoUrl';
+import { getImage } from './../../../utils/getPhotoUrl';
 
 const { confirm } = Modal;
 
@@ -88,7 +88,7 @@ const CategoriesPage = () => {
          title: 'Photo',
          dataIndex: 'photo',
          key: 'photo',
-         render: data => <Image src={getPhotoUrl(data)}></Image>,
+         render: data => <Image src={getImage(data)}></Image>,
       },
       {
          title: 'Category Name',

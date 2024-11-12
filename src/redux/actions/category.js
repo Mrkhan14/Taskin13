@@ -1,4 +1,4 @@
-import require from '../../services/request';
+import request from '../../services/request';
 import { LIMIT } from '../../utils/constants';
 
 import { CATEGORY_ACTIONS } from '../types/category';
@@ -18,7 +18,7 @@ const getCategories =
                pagination: { total, page: currentPage },
                data: categories,
             },
-         } = await require.get(`category?page=${page}&limit=${limit}`);
+         } = await request.get(`category?page=${page}&limit=${limit}`);
          // dispatch({
          //    payload: { total, categories, currentPage, pageSize: limit },
          //    type: 'getCategories',
@@ -70,14 +70,14 @@ const sendCategory =
 
 const editCategory = (form, id) => async dispatch => {
    dispatch(updateStateChange({ selected: id, isModalOpen: true }));
-   const { data } = await request.put(`category/${id}`);
+   const { data } = await request.get(`category/${id}`);
    dispatch(updateStateChange({ imageData: data.photo }));
    form.setFieldsValue(data);
 };
 
 // Categories Delete
 const deleteCategory = id => async dispatch => {
-   await require.delete(`category/${id}`);
+   await request.delete(`category/${id}`);
    dispatch(getCategories(currentPage, pageSize));
 };
 
