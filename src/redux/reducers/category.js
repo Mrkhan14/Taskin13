@@ -17,8 +17,8 @@ const categoryReducers = (state = initialState, { type, payload }) => {
    switch (type) {
       case CATEGORY_ACTIONS:
          return { ...state, ...payload };
-      case 'loading':
-         return { ...state, loading: !loading };
+      // case 'loading':
+      //    return { ...state, loading: !loading };
       default:
          return state;
    }

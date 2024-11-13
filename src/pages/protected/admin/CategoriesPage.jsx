@@ -61,7 +61,7 @@ const CategoriesPage = () => {
    const handleOk = async () => {
       const values = await form.validateFields();
       values.photo = imageData._id;
-      dispatch(sendCategory({ values, selected, activePage, search, form }));
+      dispatch(sendCategory({ values, selected, currentPage, form }));
    };
 
    const closeModal = () => {
@@ -79,7 +79,7 @@ const CategoriesPage = () => {
          content: 'Bla bla ...',
          okText: 'yes',
          cancelText: 'No',
-         onOk: () => dispatch(deleteCategory(id)),
+         onOk: () => dispatch(deleteCategory(id, page, pageSize)),
       });
    };
 
@@ -116,7 +116,9 @@ const CategoriesPage = () => {
                   </Tooltip>
                   <Tooltip title='Delete'>
                      <Button
-                        onClick={() => openConfirmDeleteModal({ id: data })}
+                        onClick={() => {
+                           openConfirmDeleteModal(data);
+                        }}
                         danger
                         shape='circle'
                         icon={<DeleteOutlined />}

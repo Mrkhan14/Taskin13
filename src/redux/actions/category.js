@@ -53,7 +53,7 @@ const uploadImage = file => async dispatch => {
 };
 
 const sendCategory =
-   ({ values, selected, activePage, search, form }) =>
+   ({ values, selected, activePage, form }) =>
    async dispatch => {
       try {
          dispatch(updateStateChange({ isModalLoading: true }));
@@ -61,7 +61,7 @@ const sendCategory =
             ? await request.post('category', values)
             : await request.put(`category/${selected}`, values);
          dispatch(updateStateChange({ isModalOpen: false, imageData: null }));
-         dispatch(getCategories(activePage, search));
+         dispatch(getCategories(activePage));
          form.resetFields();
       } finally {
          dispatch(updateStateChange({ isModalLoading: false }));
@@ -76,7 +76,7 @@ const editCategory = (form, id) => async dispatch => {
 };
 
 // Categories Delete
-const deleteCategory = id => async dispatch => {
+const deleteCategory = (id, currentPage, pageSize) => async dispatch => {
    await request.delete(`category/${id}`);
    dispatch(getCategories(currentPage, pageSize));
 };
