@@ -12,7 +12,7 @@ import {
 } from '../../../redux/actions/category';
 
 import useCategory from '../../../redux/hooks/category';
-// import { render } from 'react-dom';
+
 import {
    DeleteOutlined,
    FormOutlined,
@@ -41,7 +41,7 @@ const CategoriesPage = () => {
       categories,
       total,
       loading,
-      currentPage,
+      activePage,
       pageSize,
       selected,
       isModalLoading,
@@ -49,7 +49,7 @@ const CategoriesPage = () => {
       imageData,
       imageLoading,
    } = useCategory();
-   const [page, setPage] = useState(currentPage);
+   const [page, setPage] = useState(activePage);
    const [size, setSize] = useState(pageSize);
 
    const [form] = Form.useForm();
@@ -61,7 +61,7 @@ const CategoriesPage = () => {
    const handleOk = async () => {
       const values = await form.validateFields();
       values.photo = imageData._id;
-      dispatch(sendCategory({ values, selected, currentPage, form }));
+      dispatch(sendCategory({ values, selected, activePage, form }));
    };
 
    const closeModal = () => {
@@ -79,7 +79,13 @@ const CategoriesPage = () => {
          content: 'Bla bla ...',
          okText: 'yes',
          cancelText: 'No',
-         onOk: () => dispatch(deleteCategory(id, page, pageSize)),
+         onOk: () => {
+            if (categories.length > 1) {
+               dispatch(deleteCategory(id, page, pageSize));
+            } else {
+               dispatch(deleteCategory(id, page - 1, pageSize));
+            }
+         },
       });
    };
 
@@ -88,7 +94,7 @@ const CategoriesPage = () => {
          title: 'Photo',
          dataIndex: 'photo',
          key: 'photo',
-         render: data => <Image src={getImage(data)}></Image>,
+         render: data => <Image className='!w-16' src={getImage(data)}></Image>,
       },
       {
          title: 'Category Name',
@@ -101,6 +107,7 @@ const CategoriesPage = () => {
          key: 'description',
       },
       {
+         width: '60px',
          title: 'Setting',
          dataIndex: '_id',
          key: '_id',
@@ -152,10 +159,14 @@ const CategoriesPage = () => {
          <Spin spinning={loading}>
             <Table
                columns={columns}
-               dataSource={categories.map(category => ({
-                  ...category,
-                  key: category._id,
-               }))}
+               dataSource={categories.map(category => {
+                  console.log(categories);
+
+                  return {
+                     ...category,
+                     key: category._id,
+                  };
+               })}
                pagination={paginationConfig}
                rowKey='_id' // Adjusted to use _id as per the provided data structure
                onChange={handleTableChange}

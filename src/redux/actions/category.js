@@ -15,19 +15,19 @@ const getCategories =
          dispatch(changeLoading());
          const {
             data: {
-               pagination: { total, page: currentPage },
+               pagination: { total, page: activePage },
                data: categories,
             },
          } = await request.get(`category?page=${page}&limit=${limit}`);
          // dispatch({
-         //    payload: { total, categories, currentPage, pageSize: limit },
+         //    payload: { total, categories, activePage, pageSize: limit },
          //    type: 'getCategories',
          // });
          dispatch(
             updateStateChange({
                total,
                categories,
-               currentPage,
+               activePage,
                pageSize: limit,
             })
          );
@@ -76,9 +76,9 @@ const editCategory = (form, id) => async dispatch => {
 };
 
 // Categories Delete
-const deleteCategory = (id, currentPage, pageSize) => async dispatch => {
+const deleteCategory = (id, activePage, pageSize) => async dispatch => {
    await request.delete(`category/${id}`);
-   dispatch(getCategories(currentPage, pageSize));
+   dispatch(getCategories(activePage, pageSize));
 };
 
 const showModal = form => async dispatch => {

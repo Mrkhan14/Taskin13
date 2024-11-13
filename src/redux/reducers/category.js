@@ -3,7 +3,7 @@ const initialState = {
    categories: [],
    loading: false,
    total: 0,
-   currentPage: 1,
+   activePage: 1,
    pageSize: 10,
    selected: null,
    isModalLoading: false,
@@ -17,8 +17,8 @@ const categoryReducers = (state = initialState, { type, payload }) => {
    switch (type) {
       case CATEGORY_ACTIONS:
          return { ...state, ...payload };
-      // case 'loading':
-      //    return { ...state, loading: !loading };
+      case 'loading':
+         return { ...state, loading: !loading };
       default:
          return state;
    }
