@@ -63,11 +63,15 @@ const App = () => {
                      label: <Link to='/admin-account'>Admin-account</Link>,
                   },
                   {
+                     key: '/',
                      icon: <LogoutOutlined />,
                      label: (
-                        <Link className='!text-primary-700' onClick={logoutFon}>
+                        <button
+                           className='!text-primary-700'
+                           onClick={logoutFon}
+                        >
                            Logout
-                        </Link>
+                        </button>
                      ),
                   },
                ]}

@@ -1,72 +1,53 @@
-import React, { Fragment, useState } from 'react';
-import { LIMIT } from '../../../utils/constants';
+import React, { Fragment, useEffect, useState } from 'react';
+import request from '../../../services/request';
+import { LIMIT, USER } from '../../../utils/constants';
 import InputComponent from './../../../components/box/InputComponent';
 import CartPost from './../../../components/card/CartPost';
-import PaginationComponent from './../../../components/pagination/PaginationComponent'; // Make sure the path is correct
+import PaginationComponent from './../../../components/pagination/PaginationComponent';
 
 const MyPostPage = () => {
-   const cardData = [
-      {
-         id: 1,
-         image: 'cart1.png',
-         category: 'Startup',
-         title: 'Design tips for designers that cover everything you need',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/1',
-      },
-      {
-         id: 2,
-         image: 'cart2.png',
-         category: 'Business',
-         title: 'How to build rapport with your web design clients',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/2',
-      },
-      {
-         id: 3,
-         image: 'cart3.png',
-         category: 'Startup',
-         title: 'Logo design trends to avoid in 2022',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/3',
-      },
-      {
-         id: 4,
-         image: 'cart4.png',
-         category: 'TECHNOLOGY',
-         title: '8 Figma design systems you can download for free today',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/4',
-      },
-      {
-         id: 5,
-         image: 'cart1.png',
-         category: 'ECONOMY',
-         title: 'Font sizes in UI design: The complete guide to follow',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/4',
-      },
-   ];
-
+   const [loading, setLoading] = useState(false);
+   const [myPosts, setMyPosts] = useState([]);
    const [currentPage, setCurrentPage] = useState(1);
-   const totalPages = Math.ceil(cardData.length / LIMIT);
+   const [userId, setUserId] = useState(null);
+   const [totalPosts, setTotalPosts] = useState(0);
 
-   const indexOfLastPost = currentPage * LIMIT;
-   const indexOfFirstPost = indexOfLastPost - LIMIT;
-   const currentPosts = cardData.slice(indexOfFirstPost, indexOfLastPost);
+   useEffect(() => {
+      const userID = JSON.parse(localStorage.getItem(USER));
+      if (userID) {
+         setUserId(userID._id);
+      }
+   }, []);
+
+   const getMyPosts = async page => {
+      if (!userId) return;
+      try {
+         setLoading(true);
+         const response = await request.get(
+            `post?user=${userId}&page=${page}&limit=${LIMIT}`
+         );
+         setMyPosts(response.data.data);
+         setTotalPosts(response.data.pagination.total);
+      } catch (error) {
+         console.error(error);
+         setMyPosts([]);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   useEffect(() => {
+      getMyPosts(currentPage);
+   }, [userId, currentPage]);
+
+   const totalPages = Math.ceil(totalPosts / LIMIT);
 
    return (
       <Fragment>
-         {/* itme posts */}
          <div className='pt-10 pb-20'>
             <div className='container'>
                <div className='flex items-center justify-between'>
-                  <h1 className='text-5xl font-bold '>My posts</h1>
+                  <h1 className='text-5xl font-bold'>My posts</h1>
                   <button
                      className='bg-[#FFD050] text-2xl font-medium p-4 w-48 text-primary-600'
                      type='submit'
@@ -79,13 +60,16 @@ const MyPostPage = () => {
                   <InputComponent name='search' placeholder='Search...' />
                </div>
 
-               {currentPosts.map((card, index) => (
-                  <CartPost {...card} key={index} />
-               ))}
+               {loading ? (
+                  <p>Loading...</p>
+               ) : (
+                  myPosts.map((myPost, index) => (
+                     <CartPost {...myPost} key={index} />
+                  ))
+               )}
             </div>
          </div>
 
-         {/* Pagination */}
          <div className='container mb-20'>
             <PaginationComponent
                currentPage={currentPage}
