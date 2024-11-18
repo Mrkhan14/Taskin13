@@ -18,7 +18,7 @@ const getCategories =
                pagination: { total, page: activePage },
                data: categories,
             },
-         } = await request.get(`category?page=${page}&limit=${limit}`);
+         } = await request.get(`post?page=${page}&limit=${limit}`);
          // dispatch({
          //    payload: { total, categories, activePage, pageSize: limit },
          //    type: 'getCategories',
@@ -58,8 +58,8 @@ const sendCategory =
       try {
          dispatch(updateStateChange({ isModalLoading: true }));
          selected === null
-            ? await request.post('category', values)
-            : await request.put(`category/${selected}`, values);
+            ? await request.post('post', values)
+            : await request.put(`post/${selected}`, values);
          dispatch(updateStateChange({ isModalOpen: false, imageData: null }));
          dispatch(getCategories(activePage));
          form.resetFields();
@@ -70,14 +70,14 @@ const sendCategory =
 
 const editCategory = (form, id) => async dispatch => {
    dispatch(updateStateChange({ selected: id, isModalOpen: true }));
-   const { data } = await request.get(`category/${id}`);
+   const { data } = await request.get(`post/${id}`);
    dispatch(updateStateChange({ imageData: data.photo }));
    form.setFieldsValue(data);
 };
 
 // Categories Delete
 const deleteCategory = (id, activePage, pageSize) => async dispatch => {
-   await request.delete(`category/${id}`);
+   await request.delete(`post/${id}`);
    dispatch(getCategories(activePage, pageSize));
 };
 

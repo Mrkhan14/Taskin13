@@ -23,7 +23,7 @@ const RegisterPage = () => {
       formData.append('role', role);
       registerFun(formData, navigate);
       // registerFun(data, navigate);
-      console.log('Form Data:', data);
+      // console.log('Form Data:', data);
    };
 
    return (

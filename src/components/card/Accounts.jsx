@@ -39,16 +39,13 @@ const Accounts = () => {
    }, [reset]);
 
    const onSubmit =  async (data) => {
-      console.log('Form Data:', data);
       
       try {
          setBtnLoading(true)
          await request.put('auth/details', data)
-      } catch (error) {
-         console.log(error);
       }finally {
-            setBtnLoading(false);
-         } 
+         setBtnLoading(false);
+      } 
    };
    
    const deletePhoto = async () => {
