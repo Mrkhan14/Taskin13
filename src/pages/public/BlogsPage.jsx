@@ -17,10 +17,7 @@ const MyPostPage = () => {
          const response = await request.get(`post?page=${page}&limit=${LIMIT}`);
          setMyPosts(response.data.data);
          setTotalPosts(response.data.pagination.total);
-      } catch (error) {
-         console.error(error);
-         setMyPosts([]);
-      } finally {
+      }finally {
          setLoading(false);
       }
    };

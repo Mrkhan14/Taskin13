@@ -29,7 +29,7 @@ request.interceptors.response.use(
    },
    error => {
       if (error.response && error.response.data) {
-         message.error("xatilik bor", error.response.data)
+         message.error(error.response.data)
       }
       return Promise.reject(error);
    }

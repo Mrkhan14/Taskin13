@@ -13,10 +13,7 @@ const BlogPage = () => {
          setLoading(true);
          const response = await request.get(`post/${id}`);
          setPost(response.data);
-      } catch (error) {
-         console.error(error);
-         setPost([]);
-      } finally {
+      }finally {
          setLoading(false);
       }
    };
@@ -39,11 +36,11 @@ const BlogPage = () => {
 
                <div className='w-full max-w-3xl m-auto'>
                   <div className='flex items-center mt-14'>
-                     <div className='mr-4 w-14 h-14 rounded-full border border-black'>
+                     <div className='mr-4 border border-black rounded-full w-14 h-14'>
                         <img
                            src={`${UPLOAD_URL}${post?.user?.photo}`}
                            // alt={post?.user?.name}
-                           className='object-cover mr-3 rounded-full w-14 h-14 border-1 border-black'
+                           className='object-cover mr-3 border-black rounded-full w-14 h-14 border-1'
                         />
                      </div>
 
@@ -75,7 +72,7 @@ const BlogPage = () => {
                   </div>
 
                   <p className='flex mt-8 text-primary-600'>
-                     <b className='font-bold mr-2'>Description:</b>
+                     <b className='mr-2 font-bold'>Description:</b>
                      <div className='opacity-80'>{post?.description}</div>
                   </p>
 
@@ -87,14 +84,14 @@ const BlogPage = () => {
                   </div>
 
                   <div className='flex items-center mt-5'>
-                     <div className='mr-4  w-8 h-8 rounded-md border border-black'>
+                     <div className='w-8 h-8 mr-4 border border-black rounded-md'>
                         <img
                            src={`${UPLOAD_URL}${post?.category?.photo}.jpg`}
-                           className='object-cover mr-3 rounded-full w-8 h-8 border-1 border-black'
+                           className='object-cover w-8 h-8 mr-3 border-black rounded-full border-1'
                         />
                      </div>
 
-                     <span className='text-red-500 font-bold'>
+                     <span className='font-bold text-red-500'>
                         {post?.category?.name}
                      </span>
                   </div>
