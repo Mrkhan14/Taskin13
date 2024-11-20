@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import FormattedDate from '../../components/box/FormattedDate';
 import Truncate from '../../components/box/Truncate';
 import CategoryCarousel from '../../components/card/CategoryCarousel';
+import HomeCart from '../../components/card/HomeCart';
 import request from '../../services/request';
 
 const HomePage = () => {
    const [loading, setLoading] = useState(false);
    const [lastOne, setLastOne] = useState(null);
+   const [lastOnes, setLastOnes] = useState([]);
    const [categories, setCategories] = useState([]);
 
    const getLastOne = async () => {
@@ -15,6 +17,17 @@ const HomePage = () => {
          setLoading(true);
          const res = await request.get('post/lastone');
          setLastOne(res.data);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const getLastOnes = async () => {
+      try {
+         setLoading(true);
+         const res = await request.get('post/lastones');
+         setLastOnes(res.data);
+         console.log(res);
       } finally {
          setLoading(false);
       }
@@ -29,9 +42,11 @@ const HomePage = () => {
          setLoading(false);
       }
    };
+
    useEffect(() => {
       getLastOne();
       getCategory();
+      getLastOnes();
    }, []);
 
    return (
@@ -82,62 +97,10 @@ const HomePage = () => {
          </div>
 
          {/* Popular blogs */}
-         <div className='pt-20 home-cart'>
+         <div className='py-20 home-cart'>
             <div className='container'>
                <h1 className='pb-8 text-3xl font-bold'>Popular blogs</h1>
-               <div className='grid grid-cols-3 gap-6 pb-16 border-b border-neutral-200'>
-                  <div>
-                     <img
-                        src='cart1.png'
-                        className='w-full object-cover  h-[310px]'
-                        alt=''
-                     />
-                     <div className='mt-5'>By John Doe l Aug 23, 2021 </div>
-                     <div className='mt-5 text-3xl font-bold text-primary-600'>
-                        A UX Case Study Creating a Studious Environment for
-                        Students:{' '}
-                     </div>
-                     <div className='mt-5'>
-                        Duis aute irure dolor in reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident.
-                     </div>
-                  </div>
-                  <div>
-                     <img
-                        src='cart2.png'
-                        className=' object-cover w-full h-[310px]'
-                        alt=''
-                     />
-                     <div className='mt-5'>By John Doe l Aug 23, 2021 </div>
-                     <div className='mt-5 text-3xl font-bold text-primary-600'>
-                        A UX Case Study Creating a Studious Environment for
-                        Students:{' '}
-                     </div>
-                     <div className='mt-5'>
-                        Duis aute irure dolor in reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident.
-                     </div>
-                  </div>
-                  <div>
-                     <img
-                        src='cart3.png'
-                        className=' object-cover w-full h-[310px]'
-                        alt=''
-                     />
-                     <div className='mt-5'>By John Doe l Aug 23, 2021 </div>
-                     <div className='mt-5 text-3xl font-bold text-primary-600'>
-                        A UX Case Study Creating a Studious Environment for
-                        Students:{' '}
-                     </div>
-                     <div className='mt-5'>
-                        Duis aute irure dolor in reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident.
-                     </div>
-                  </div>
-               </div>
+               <HomeCart lastOnes={lastOnes} />
             </div>
          </div>
 
