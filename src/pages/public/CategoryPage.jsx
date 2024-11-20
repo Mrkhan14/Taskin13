@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import request from '../../services/request';
-import InputComponent from './../../components/box/InputComponent';
+import InputSearch from './../../components/box/InputSearch';
 import CartPost from './../../components/card/CartPost';
 import PaginationComponent from './../../components/pagination/PaginationComponent';
 import { LIMIT } from './../../utils/constants';
@@ -10,14 +10,16 @@ const CategoryPage = () => {
    const { id } = useParams();
    const [loading, setLoading] = useState(false);
    const [categories, setCategories] = useState([]);
+   const [infoCategory, setInfoCategory] = useState([]);
    const [currentPage, setCurrentPage] = useState(1);
    const [totalPosts, setTotalPosts] = useState(0);
+   const [searchQuery, setSearchQuery] = useState('');
 
-   const getCategory = async page => {
+   const getCategory = async (page, query = '') => {
       try {
          setLoading(true);
          const response = await request.get(
-            `post?category=${id}&page=${page}&limit=${LIMIT}`
+            `post?category=${id}&page=${page}&limit=${LIMIT}&search=${query}`
          );
          setCategories(response.data.data);
          setTotalPosts(response.data.pagination.total);
@@ -26,9 +28,25 @@ const CategoryPage = () => {
       }
    };
 
+   const getInfoCategory = async () => {
+      try {
+         setLoading(true);
+         const response = await request.get(`category/${id}`);
+         setInfoCategory(response.data);
+      } finally {
+         setLoading(false);
+      }
+   };
+
    useEffect(() => {
-      getCategory(currentPage);
-   }, [currentPage]);
+      getInfoCategory();
+      getCategory(currentPage, searchQuery);
+   }, [currentPage, searchQuery]);
+
+   const handleSearch = query => {
+      setSearchQuery(query);
+      setCurrentPage(1); // Reset to the first page when a new search is made
+   };
 
    const totalPages = Math.ceil(totalPosts / LIMIT);
 
@@ -39,22 +57,20 @@ const CategoryPage = () => {
             <div className='container'>
                <div className='flex h-[348px] flex-col items-center justify-center'>
                   <div className='mb-5 text-4xl font-bold text-primary-600'>
-                     Business
+                     {infoCategory?.name}
                   </div>
                   <div className='mb-5 text-center opacity-50 text-primary-600'>
-                     Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                     sed do <br /> eiusmod tempor incididunt ut labore.
+                     {infoCategory?.description}
                   </div>
                   <div className='text-2xl text-primary-600'>
-                     Blog / Business
+                     Blog / {infoCategory?.name}
                   </div>
                </div>
             </div>
          </div>
 
-         {/* InputComponent for Searching */}
          <div className='container mt-8'>
-            <InputComponent name='search' placeholder='Search...' />
+            <InputSearch onSearch={handleSearch} />
          </div>
 
          <div className='pb-20'>

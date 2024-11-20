@@ -15,7 +15,6 @@ const LoginPage = () => {
 
    const onSubmit = data => {
       login(data, navigate);
-      // console.log('Form Data:', data);
    };
 
    return (

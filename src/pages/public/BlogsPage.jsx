@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import request from '../../services/request';
-import InputComponent from './../../components/box/InputComponent';
+import InputSearch from './../../components/box/InputSearch';
 import CartPost from './../../components/card/CartPost';
 import PaginationComponent from './../../components/pagination/PaginationComponent';
 import { LIMIT } from './../../utils/constants';
@@ -10,21 +10,29 @@ const MyPostPage = () => {
    const [myPosts, setMyPosts] = useState([]);
    const [currentPage, setCurrentPage] = useState(1);
    const [totalPosts, setTotalPosts] = useState(0);
+   const [searchQuery, setSearchQuery] = useState('');
 
-   const getMyPosts = async page => {
+   const getMyPosts = async (page, query = '') => {
       try {
          setLoading(true);
-         const response = await request.get(`post?page=${page}&limit=${LIMIT}`);
+         const response = await request.get(
+            `post?page=${page}&limit=${LIMIT}&search=${query}`
+         );
          setMyPosts(response.data.data);
          setTotalPosts(response.data.pagination.total);
-      }finally {
+      } finally {
          setLoading(false);
       }
    };
 
    useEffect(() => {
-      getMyPosts(currentPage);
-   }, [currentPage]);
+      getMyPosts(currentPage, searchQuery);
+   }, [currentPage, searchQuery]);
+
+   const handleSearch = query => {
+      setSearchQuery(query);
+      setCurrentPage(1); // Reset to the first page when a new search is made
+   };
 
    const totalPages = Math.ceil(totalPosts / LIMIT);
 
@@ -32,7 +40,7 @@ const MyPostPage = () => {
       <Fragment>
          <div className='container'>
             <div className='border-b py-14 border-neutral-200'>
-               <InputComponent name='search' placeholder='Search...' />
+               <InputSearch onSearch={handleSearch} />
             </div>
          </div>
 

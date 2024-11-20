@@ -160,8 +160,6 @@ const CategoriesPage = () => {
             <Table
                columns={columns}
                dataSource={categories.map(category => {
-                  // console.log(categories);
-
                   return {
                      ...category,
                      key: category._id,

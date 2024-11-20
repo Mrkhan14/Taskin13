@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import request from '../../../services/request';
 import { LIMIT, USER } from '../../../utils/constants';
-import InputComponent from './../../../components/box/InputComponent';
+import InputSearch from './../../../components/box/InputSearch';
 import CartPost from './../../../components/card/CartPost';
 import PaginationComponent from './../../../components/pagination/PaginationComponent';
 
@@ -11,6 +11,7 @@ const MyPostPage = () => {
    const [currentPage, setCurrentPage] = useState(1);
    const [userId, setUserId] = useState(null);
    const [totalPosts, setTotalPosts] = useState(0);
+   const [searchQuery, setSearchQuery] = useState('');
 
    useEffect(() => {
       const userID = JSON.parse(localStorage.getItem(USER));
@@ -19,12 +20,12 @@ const MyPostPage = () => {
       }
    }, []);
 
-   const getMyPosts = async page => {
+   const getMyPosts = async (page, query) => {
       if (!userId) return;
       try {
          setLoading(true);
          const response = await request.get(
-            `post?user=${userId}&page=${page}&limit=${LIMIT}`
+            `post?user=${userId}&page=${page}&limit=${LIMIT}&search=${query}`
          );
          setMyPosts(response.data.data);
          setTotalPosts(response.data.pagination.total);
@@ -36,9 +37,14 @@ const MyPostPage = () => {
       }
    };
 
+   const handleSearch = query => {
+      setSearchQuery(query);
+      setCurrentPage(1);
+   };
+
    useEffect(() => {
-      getMyPosts(currentPage);
-   }, [userId, currentPage]);
+      getMyPosts(currentPage, searchQuery);
+   }, [userId, currentPage, searchQuery]);
 
    const totalPages = Math.ceil(totalPosts / LIMIT);
 
@@ -57,7 +63,7 @@ const MyPostPage = () => {
                </div>
 
                <div className='mt-10 border-t py-14 border-neutral-200'>
-                  <InputComponent name='search' placeholder='Search...' />
+                  <InputSearch onSearch={handleSearch} />
                </div>
 
                {loading ? (

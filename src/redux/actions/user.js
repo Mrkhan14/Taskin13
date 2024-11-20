@@ -17,7 +17,6 @@ const getUsers =
             payload: { total, users, currentPage, pageSize: limit },
             type: 'getUsers',
          });
-         console.log(users);
       } finally {
          dispatch(changeLoading());
       }
