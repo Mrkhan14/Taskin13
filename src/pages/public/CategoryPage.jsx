@@ -1,51 +1,36 @@
-import React, { Fragment, useState } from 'react';
-import { LIMIT } from '../../utils/constants';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import request from '../../services/request';
 import InputComponent from './../../components/box/InputComponent';
 import CartPost from './../../components/card/CartPost';
-import PaginationComponent from './../../components/pagination/PaginationComponent'; // Make sure the path is correct
+import PaginationComponent from './../../components/pagination/PaginationComponent';
+import { LIMIT } from './../../utils/constants';
 
 const CategoryPage = () => {
-   const cardData = [
-      {
-         image: 'cart1.png',
-         category: 'Business',
-         title: 'Top 6 free website mockup tools 2022',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/1',
-      },
-      {
-         image: 'cart1.png',
-         category: 'Business',
-         title: 'Top 6 free website mockup tools 2022',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/2',
-      },
-      {
-         image: 'cart1.png',
-         category: 'Business',
-         title: 'Top 6 free website mockup tools 2022',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/3',
-      },
-      {
-         image: 'cart1.png',
-         category: 'Business',
-         title: 'Top 6 free website mockup tools 2022',
-         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non blandit massa enim nec.',
-         link: '/post/4',
-      },
-   ];
-
+   const { id } = useParams();
+   const [loading, setLoading] = useState(false);
+   const [categories, setCategories] = useState([]);
    const [currentPage, setCurrentPage] = useState(1);
-   const totalPages = Math.ceil(cardData.length / LIMIT);
+   const [totalPosts, setTotalPosts] = useState(0);
 
-   const indexOfLastPost = currentPage * LIMIT;
-   const indexOfFirstPost = indexOfLastPost - LIMIT;
-   const currentPosts = cardData.slice(indexOfFirstPost, indexOfLastPost);
+   const getCategory = async page => {
+      try {
+         setLoading(true);
+         const response = await request.get(
+            `post?category=${id}&page=${page}&limit=${LIMIT}`
+         );
+         setCategories(response.data.data);
+         setTotalPosts(response.data.pagination.total);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   useEffect(() => {
+      getCategory(currentPage);
+   }, [currentPage]);
+
+   const totalPages = Math.ceil(totalPosts / LIMIT);
 
    return (
       <Fragment>
@@ -72,23 +57,20 @@ const CategoryPage = () => {
             <InputComponent name='search' placeholder='Search...' />
          </div>
 
-         {/* itme posts */}
-         <div className='py-20'>
+         <div className='pb-20'>
             <div className='container'>
-               {currentPosts.map((card, index) => (
-                  <CartPost
-                     key={index}
-                     image={card.image}
-                     category={card.category}
-                     title={card.title}
-                     description={card.description}
-                     link={card.link}
-                  />
-               ))}
+               <h1 className='my-8 text-4xl font-bold'>All posts</h1>
+
+               {loading ? (
+                  <p>Loading...</p>
+               ) : (
+                  categories.map((item, index) => (
+                     <CartPost {...item} key={index} />
+                  ))
+               )}
             </div>
          </div>
 
-         {/* Pagination */}
          <div className='container mb-20'>
             <PaginationComponent
                currentPage={currentPage}

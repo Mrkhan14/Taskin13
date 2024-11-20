@@ -8,6 +8,9 @@ import useAuth from './hooks/useAuth';
 import AdminAccountPage from './pages/protected/admin/AdminAccountPage';
 import DashboardPage from './pages/protected/admin/DashboardPage';
 
+import AdminBlogsPage from './pages/protected/admin/AdminBlogsPage';
+import CategoriesPage from './pages/protected/admin/CategoriesPage';
+import UsersPage from './pages/protected/admin/UsersPage';
 import MyPostPage from './pages/protected/user/MyPostPage';
 import UserAccountPage from './pages/protected/user/UserAccountPage';
 import AboutPage from './pages/public/AboutPage';
@@ -18,9 +21,6 @@ import HomePage from './pages/public/HomePage';
 import LoginPage from './pages/public/LoginPage';
 import NotFoundPage from './pages/public/NotFoundPage';
 import RegisterPage from './pages/public/RegisterPage';
-import CategoriesPage from './pages/protected/admin/CategoriesPage';
-import UsersPage from './pages/protected/admin/UsersPage';
-import AdminBlogsPage from './pages/protected/admin/AdminBlogsPage';
 function App() {
    const { user } = useAuth() || {};
    const role = user?.role;
@@ -37,7 +37,7 @@ function App() {
                      element={<BlogPage></BlogPage>}
                   ></Route>
                   <Route
-                     path='category'
+                     path='category/:id'
                      element={<CategoryPage></CategoryPage>}
                   ></Route>
                   <Route path='about' element={<AboutPage></AboutPage>}></Route>

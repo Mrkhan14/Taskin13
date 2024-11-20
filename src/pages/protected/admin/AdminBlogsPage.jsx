@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
-
 import { useDispatch } from 'react-redux';
+import request from './../../../services/request';
+
 // actions
 import {
    controlModal,
@@ -15,7 +16,7 @@ import {
 import usePost from '../../../redux/hooks/post';
 // context
 import { getImage } from './../../../utils/getPhotoUrl';
-//component
+// component
 import {
    DeleteOutlined,
    FormOutlined,
@@ -28,13 +29,16 @@ import {
    Image,
    Input,
    Modal,
+   Select,
    Spin,
    Table,
    Tooltip,
    Upload,
 } from 'antd';
 import FormattedDate from '../../../components/box/FormattedDate';
+
 const { confirm } = Modal;
+const { Option } = Select;
 
 const AdminBlogsPage = () => {
    const dispatch = useDispatch();
@@ -53,6 +57,17 @@ const AdminBlogsPage = () => {
    } = usePost();
    const [page, setPage] = useState(activePage);
    const [size, setSize] = useState(pageSize);
+   const [categories, setCategories] = useState([]); // State to store categories
+
+   useEffect(() => {
+      // Fetch categories from your backend and set them in state
+      const fetchCategories = async () => {
+         const response = await request.get('category');
+         setCategories(response.data.data); // Adjust according to your response structure
+      };
+      fetchCategories();
+   }, []);
+
    const columns = [
       {
          title: 'Photo',
@@ -76,7 +91,7 @@ const AdminBlogsPage = () => {
          key: '_id',
          render: createdAt => (
             <Fragment>
-               <FormattedDate createdAt={createdAt}></FormattedDate>
+               <FormattedDate data={createdAt}></FormattedDate>
             </Fragment>
          ),
       },
@@ -86,7 +101,7 @@ const AdminBlogsPage = () => {
          key: '_id',
          render: updatedAt => (
             <Fragment>
-               <FormattedDate createdAt={updatedAt}></FormattedDate>
+               <FormattedDate data={updatedAt}></FormattedDate>
             </Fragment>
          ),
       },
@@ -134,12 +149,10 @@ const AdminBlogsPage = () => {
       setSize(pagination.pageSize);
    };
 
-   // Control Modal
    const closeModal = () => {
       dispatch(controlModal(false));
    };
 
-   // Fun Delete
    const openConfirmDeleteModal = id => {
       confirm({
          title: 'Confirm',
@@ -243,7 +256,6 @@ const AdminBlogsPage = () => {
                      )}
                   </div>
                </Upload>
-               {/* <input type="file" onChange={uploadImage}/> */}
                <Form.Item
                   label='Name'
                   name='title'
@@ -268,6 +280,44 @@ const AdminBlogsPage = () => {
                   ]}
                >
                   <Input.TextArea />
+               </Form.Item>
+
+               <Form.Item
+                  label='Category'
+                  name='category'
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Please select a category!',
+                     },
+                  ]}
+               >
+                  <Select>
+                     {categories.map(category => (
+                        <Option key={category._id} value={category._id}>
+                           {category.name}
+                        </Option>
+                     ))}
+                  </Select>
+               </Form.Item>
+
+               <Form.Item
+                  label='Tags'
+                  name='tags'
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Please add tags!',
+                     },
+                  ]}
+               >
+                  <Select
+                     mode='tags'
+                     style={{
+                        width: '100%',
+                     }}
+                     placeholder='Add tags'
+                  ></Select>
                </Form.Item>
             </Form>
          </Modal>

@@ -76,11 +76,15 @@ const sendPost =
    async dispatch => {
       try {
          dispatch(updateStateChange({ isModalLoading: true }));
+         // Ensure tags are in array format
+         if (values.tags && typeof values.tags === 'string') {
+            values.tags = values.tags.split(',').map(tag => tag.trim());
+         }
          selected === null
             ? await request.post('post', values)
             : await request.put(`post/${selected}`, values);
          dispatch(updateStateChange({ isModalOpen: false, imageData: null }));
-         dispatch(getCategories(activePage));
+         dispatch(getPosts(activePage)); // Ensure it is `getPosts` here
          form.resetFields();
       } finally {
          dispatch(updateStateChange({ isModalLoading: false }));
@@ -91,6 +95,10 @@ const editPost = (form, id) => async dispatch => {
    dispatch(updateStateChange({ selected: id, isModalOpen: true }));
    const { data } = await request.get(`post/${id}`);
    dispatch(updateStateChange({ imageData: data.photo }));
+   // Ensure tags are in array format
+   if (data.tags && typeof data.tags === 'string') {
+      data.tags = data.tags.split(',').map(tag => tag.trim());
+   }
    form.setFieldsValue(data);
 };
 

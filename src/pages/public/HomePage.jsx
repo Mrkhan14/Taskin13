@@ -1,7 +1,39 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import FormattedDate from '../../components/box/FormattedDate';
+import Truncate from '../../components/box/Truncate';
 import CategoryCarousel from '../../components/card/CategoryCarousel';
+import request from '../../services/request';
 
 const HomePage = () => {
+   const [loading, setLoading] = useState(false);
+   const [lastOne, setLastOne] = useState(null);
+   const [categories, setCategories] = useState([]);
+
+   const getLastOne = async () => {
+      try {
+         setLoading(true);
+         const res = await request.get('post/lastone');
+         setLastOne(res.data);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   const getCategory = async () => {
+      try {
+         setLoading(true);
+         const res = await request.get('category');
+         setCategories(res.data.data);
+      } finally {
+         setLoading(false);
+      }
+   };
+   useEffect(() => {
+      getLastOne();
+      getCategory();
+   }, []);
+
    return (
       <Fragment>
          {/* Existing content */}
@@ -18,23 +50,33 @@ const HomePage = () => {
                <div className='container'>
                   <div className='text-white'>Posted on startup</div>
                   <div className='text-white text-[56px] font-bold w-[800px] my-8'>
-                     Step-by-step guide to choosing great font pairs
+                     {lastOne?.title}
                   </div>
-                  <div className='my-8 text-white'>
-                     By <span className='text-yellow-400'>James West</span> |
-                     May 23, 2022{' '}
+                  <div className='my-8 text-white flex items-center'>
+                     By
+                     <span className='text-yellow-400 mx-3'>
+                        {lastOne?.user?.first_name} {lastOne?.user?.last_name}
+                     </span>
+                     |
+                     <FormattedDate
+                        className='!mt-0'
+                        data={lastOne?.createdAt}
+                     ></FormattedDate>
                   </div>
                   <div className='mb-8 text-white'>
-                     Duis aute irure dolor in reprehenderit in voluptate velit
-                     esse cillum dolore eu <br /> fugiat nulla pariatur.
-                     Excepteur sint occaecat cupidatat non proident.
+                     {lastOne?.description && (
+                        <Truncate
+                           text={lastOne.description}
+                           wordLimit={20}
+                        ></Truncate>
+                     )}
                   </div>
-                  <button
+                  <Link
                      className='bg-[#FFD050] text-2xl font-medium p-4 w-[204px] text-primary-600'
-                     type='submit'
+                     to={`/blogs/${lastOne?._id}`}
                   >
                      Read More
-                  </button>
+                  </Link>
                </div>
             </div>
          </div>
@@ -105,7 +147,7 @@ const HomePage = () => {
                <h1 className='pb-10 text-3xl font-bold text-center'>
                   Choose A Category
                </h1>
-               <CategoryCarousel />
+               <CategoryCarousel categories={categories} />
             </div>
          </div>
       </Fragment>

@@ -7,11 +7,19 @@
 import { UPLOAD_URL } from './constants';
 
 const getUserImage = photo => {
-   return `${UPLOAD_URL}/${photo}`;
+   return `${UPLOAD_URL}${photo}`;
 };
 
 const getImage = photo => {
-   return `${UPLOAD_URL}/${photo?._id}.${photo?.name.split('.')[1]}`;
+   return `${UPLOAD_URL}${photo?._id}.${photo?.name.split('.')[1]}`;
 };
 
-export { getImage, getUserImage };
+const getImage2 = photo => {
+   if (photo && photo.name) {
+      const extension = photo.name.split('.').pop();
+      return `${UPLOAD_URL}${photo._id}.${extension}`;
+   }
+   return '';
+};
+
+export { getImage, getImage2, getUserImage };
