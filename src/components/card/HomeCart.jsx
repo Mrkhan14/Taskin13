@@ -44,21 +44,23 @@ const HomeCart = ({ lastOnes }) => {
                      <Image className='w-full ' src={getImage(item?.photo)} />
                   </div>
 
-                  <div className='mt-5 flex'>
+                  <div className='flex mt-5'>
                      By
-                     <span className='text-primary-700'>
+                     <span className='ml-3 text-primary-700'>
                         {item?.user?.first_name} {item?.user?.last_name}
                      </span>
-                     <FormattedDate
-                        className='!mt-0'
-                        data={item?.createdAt}
-                     ></FormattedDate>
+
                   </div>
-                  <div className='mt-5 text-3xl font-bold text-primary-600'>
-                     <Truncate text={item?.title} wordLimit={3}></Truncate>
+                  <FormattedDate
+                     className='!mt-0'
+                     data={item?.createdAt}
+                  ></FormattedDate>
+                  <div className='mt-5 text-3xl font-bold text-primary-600 '>
+                     <Truncate className='min-h-20' text={item?.title} wordLimit={3}></Truncate>
                   </div>
-                  <div className='mt-5'>
+                  <div className='mt-1'>
                      <Truncate
+                        className='min-h-14'
                         text={item?.description}
                         wordLimit={10}
                      ></Truncate>
@@ -71,3 +73,7 @@ const HomeCart = ({ lastOnes }) => {
 };
 
 export default HomeCart;
+
+
+
+

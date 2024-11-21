@@ -10,9 +10,9 @@ const truncateText = (text, wordLimit) => {
    return text;
 };
 
-const Truncate = ({ text, wordLimit }) => {
+const Truncate = ({ text, wordLimit, className }) => {
    const truncatedText = truncateText(text, wordLimit);
-   return <p>{truncatedText}</p>;
+   return <p className={className}>{truncatedText}</p>;
 };
 
 export default Truncate;
