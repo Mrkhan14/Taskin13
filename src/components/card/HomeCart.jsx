@@ -74,6 +74,4 @@ const HomeCart = ({ lastOnes }) => {
 
 export default HomeCart;
 
-
-
-
+   
