@@ -60,7 +60,7 @@ const HomeCart = ({ lastOnes }) => {
                   </div>
                   <div className='mt-1'>
                      <Truncate
-                        className='min-h-14'
+                        className='min-h-14 '
                         text={item?.description}
                         wordLimit={10}
                      ></Truncate>
