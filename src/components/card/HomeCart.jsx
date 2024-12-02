@@ -55,7 +55,7 @@ const HomeCart = ({ lastOnes }) => {
                      className='!mt-0'
                      data={item?.createdAt}
                   ></FormattedDate>
-                  <div className='mt-5 text-3xl font-bold text-primary-600 '>
+                  <div className='mt-5 text-3xl font-bold text-primary-600 tex'>
                      <Truncate className='min-h-20' text={item?.title} wordLimit={3}></Truncate>
                   </div>
                   <div className='mt-1'>
