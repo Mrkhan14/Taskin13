@@ -63,11 +63,6 @@ const HomeCart = ({ lastOnes }) => {
                         text={item?.description}
                         wordLimit={10}
                      ></Truncate>
-
-
-
-
-                     
                   </div>
                </div>
             </Link>
