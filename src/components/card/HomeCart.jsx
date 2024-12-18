@@ -44,6 +44,8 @@ const HomeCart = ({ lastOnes }) => {
                      <Image className='w-full ' src={getImage(item?.photo)} />
                   </div>
 
+                  
+                  
                   <div className='flex mt-5'>
                      By
                      <span className='ml-3 text-primary-700'>
