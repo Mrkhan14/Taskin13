@@ -45,6 +45,9 @@ const HomeCart = ({ lastOnes }) => {
                   </div>
                   <div className='flex mt-5'>
                      By
+
+
+                     
                      <span className='ml-3 text-primary-700'>
                         {item?.user?.first_name} {item?.user?.last_name}
                      </span>
